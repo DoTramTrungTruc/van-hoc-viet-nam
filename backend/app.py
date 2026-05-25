@@ -177,8 +177,7 @@ def create_app(config_class=Config):
     
     logger.info("Flask app created successfully")
     return app
-
-
+ 
 if __name__ == '__main__':
     app = create_app()
     logger.info("Starting Flask development server...")
