@@ -16,7 +16,7 @@ client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 # ===== KẾT NỐI NEO4J =====
 neo4j = Neo4jService(
     uri=os.getenv("NEO4J_URI", "bolt://localhost:7687"),
-    user=os.getenv("NEO4J_USER", "ae54e57b"),
+    user=os.getenv("NEO4J_USER", "neo4j"),
     password=os.getenv("NEO4J_PASSWORD", "password")
 )
 
