@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tác Phẩm - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/tac_pham.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham" class="active">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="page-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="container">
+                <h1 class="page-title">Tác Phẩm Văn Học Việt Nam</h1>
+                <p class="page-subtitle">Kho tàng văn học dân tộc qua các thời kỳ</p>
+                
+                <!-- Search Box -->
+                <div class="search-box">
+                    <div class="search-container">
+                        <input type="text" 
+                               id="searchInput" 
+                               class="search-input"
+                               placeholder="Tìm kiếm tác phẩm...">
+                        <button onclick="searchTacPham()" class="search-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Stats -->
+                <div class="hero-stats">
+                    <span id="totalCount">-</span> tác phẩm
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="container">
+            <div class="filters-header">
+                <h3>🔍 Lọc tác phẩm</h3>
+            </div>
+            <div class="filters-grid">
+                <div class="filter-item">
+                    <label class="filter-label">Thể loại</label>
+                    <select id="theLoaiFilter" class="filter-select" onchange="filterByTheLoai()">
+                        <option value="">-- Tất cả thể loại --</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label class="filter-label">Giai đoạn</label>
+                    <select id="giaiDoanFilter"
+                            class="filter-select"
+                            onchange="filterByGiaiDoan()">
+                        <option value="">-- Tất cả giai đoạn --</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label class="filter-label">Sắp xếp</label>
+                    <select id="sortFilter" class="filter-select" onchange="sortWorks()">
+                        <option value="name-asc">Tên (A-Z)</option>
+                        <option value="name-desc">Tên (Z-A)</option>
+                        <option value="year-asc">Năm (Cũ → Mới)</option>
+                        <option value="year-desc">Năm (Mới → Cũ)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="main-content">
+        <div class="container">
+            <!-- Loading -->
+            <div id="loading" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Đang tải danh sách tác phẩm...</p>
+            </div>
+
+            <!-- Works Grid -->
+            <div id="worksGrid" class="works-grid" style="display: none;">
+                <!-- Loaded by JavaScript -->
+            </div>
+
+            <!-- Search Results -->
+            <div id="searchResults" style="display: none;">
+                <div class="search-header">
+                    <h3>Kết quả tìm kiếm</h3>
+                    <button onclick="showAllTacPham()" class="btn-back">
+                        ← Hiển thị tất cả
+                    </button>
+                </div>
+                <div id="searchResultsGrid" class="works-grid"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/tac_pham.js"></script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diễn Đàn - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/forum.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="container">
+        <div class="nav-brand">
+            <span class="brand-icon">📖</span>
+            <span class="brand-text">Văn Học Việt Nam</span>
+        </div>
+        <ul class="nav-menu">
+            <li><a href="/">Trang chủ</a></li>
+            <li><a href="/tac-gia">Tác giả</a></li>
+            <li><a href="/tac-pham">Tác phẩm</a></li>
+            <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+            <li><a href="/dien-dan" class="active">Diễn đàn</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="forum-hero">
+    <div class="container">
+        <h1>🗣️ Diễn Đàn Văn Học</h1>
+        <p>Nơi cộng đồng chia sẻ cảm nhận, thảo luận về văn học Việt Nam</p>
+    </div>
+</div>
+
+<!-- Main Layout -->
+<div class="forum-layout container">
+
+    <!-- LEFT: Feed -->
+    <main class="forum-main">
+
+        <!-- Tạo bài -->
+        <div id="createPostBox" class="create-post-box" style="display:none">
+            <div class="create-post-header">
+                <div class="avatar-circle" id="myAvatar">?</div>
+                <button class="create-post-trigger" onclick="openPostModal()">
+                    Bạn đang nghĩ gì về văn học hôm nay?
+                </button>
+            </div>
+            <div class="create-post-shortcuts">
+                <button onclick="openPostModal('tac_pham')">📖 Nhắc đến tác phẩm</button>
+                <button onclick="openPostModal('tac_gia')">✍️ Nhắc đến tác giả</button>
+                <button onclick="openPostModal()">💬 Bài viết tự do</button>
+            </div>
+        </div>
+
+        <!-- Chưa đăng nhập -->
+        <div id="loginPrompt" class="login-prompt" style="display:none">
+            <span>📚 Đăng nhập để tham gia thảo luận!</span>
+            <a href="/login" class="btn-login-prompt">Đăng nhập</a>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="feed-tabs">
+            <button class="feed-tab active" onclick="switchTab(this,'all')">🌐 Tất cả</button>
+            <button class="feed-tab" onclick="switchTab(this,'tac_pham')">📖 Tác phẩm</button>
+            <button class="feed-tab" onclick="switchTab(this,'tac_gia')">✍️ Tác giả</button>
+        </div>
+
+        <!-- Posts feed -->
+        <div id="postsFeed">
+            <div class="feed-loading">
+                <div class="spinner"></div>
+                <span>Đang tải bài viết...</span>
+            </div>
+        </div>
+
+        <!-- Load more -->
+        <div id="loadMoreWrap" style="text-align:center;margin:2rem 0;display:none">
+            <button class="btn-load-more" onclick="loadMorePosts()">Tải thêm bài viết</button>
+        </div>
+
+    </main>
+
+    <!-- RIGHT: Sidebar -->
+    <aside class="forum-sidebar">
+        <div class="sidebar-card">
+            <h3>📊 Thống kê cộng đồng</h3>
+            <div class="stat-row"><span>📝 Bài viết</span><strong id="statPosts">-</strong></div>
+            <div class="stat-row"><span>💬 Bình luận</span><strong id="statComments">-</strong></div>
+        </div>
+
+        <div class="sidebar-card">
+            <h3>🔥 Chủ đề nổi bật</h3>
+            <div class="hot-tags">
+                <span class="hot-tag" onclick="filterByTag('tac_pham','Truyện Kiều')">Truyện Kiều</span>
+                <span class="hot-tag" onclick="filterByTag('tac_pham','Chí Phèo')">Chí Phèo</span>
+                <span class="hot-tag" onclick="filterByTag('tac_gia','Nguyễn Du')">Nguyễn Du</span>
+                <span class="hot-tag" onclick="filterByTag('tac_gia','Nam Cao')">Nam Cao</span>
+                <span class="hot-tag" onclick="filterByTag('tac_pham','Tắt Đèn')">Tắt Đèn</span>
+                <span class="hot-tag" onclick="filterByTag('tac_gia','Hồ Xuân Hương')">Hồ Xuân Hương</span>
+            </div>
+        </div>
+
+        <div class="sidebar-card">
+            <h3>📜 Hướng dẫn</h3>
+            <ul class="guide-list">
+                <li>✅ Tôn trọng ý kiến người khác</li>
+                <li>✅ Dẫn nguồn khi trích dẫn</li>
+                <li>✅ Không spam, không quảng cáo</li>
+                <li>✅ Chia sẻ cảm nhận chân thật</li>
+            </ul>
+        </div>
+    </aside>
+</div>
+
+<!-- Modal tạo bài -->
+<div id="postModal" class="modal-overlay" style="display:none" onclick="closePostModalOutside(event)">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3>✍️ Tạo bài viết mới</h3>
+            <button class="modal-close" onclick="closePostModal()">✕</button>
+        </div>
+
+        <div class="modal-body">
+            <!-- Tag chọn -->
+            <div class="tag-selector">
+                <label>📌 Gắn thẻ (tùy chọn)</label>
+                <div class="tag-row">
+                    <select id="tagType" onchange="onTagTypeChange()">
+                        <option value="">-- Không gắn thẻ --</option>
+                        <option value="tac_pham">📖 Tác phẩm</option>
+                        <option value="tac_gia">✍️ Tác giả</option>
+                    </select>
+                    <input type="text" id="tagName" placeholder="Tên tác phẩm / tác giả..." style="display:none">
+                </div>
+            </div>
+
+            <!-- Tiêu đề -->
+            <input type="text" id="postTitle" class="post-title-input"
+                   placeholder="Tiêu đề (tùy chọn)..." maxlength="200">
+
+            <!-- Nội dung -->
+            <textarea id="postContent" class="post-content-input"
+                      placeholder="Chia sẻ cảm nhận, phân tích, hoặc thảo luận về văn học..."
+                      rows="6" oninput="updateCharCount()"></textarea>
+            <div class="char-count"><span id="charCount">0</span>/2000</div>
+        </div>
+
+        <div class="modal-footer">
+            <span id="modalError" class="modal-error"></span>
+            <button class="btn-cancel" onclick="closePostModal()">Hủy</button>
+            <button class="btn-submit" onclick="submitPost()" id="submitBtn">
+                🚀 Đăng bài
+            </button>
+        </div>
+    </div>
+</div>
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Văn Học Việt Nam</h3>
+                <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Liên kết</h4>
+                <ul>
+                    <li><a href="/tac-gia">Tác giả</a></li>
+                    <li><a href="/tac-pham">Tác phẩm</a></li>
+                    <li><a href="/dien-dan">Diễn đàn</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h4>Công nghệ</h4>
+                <ul>
+                    <li>Neo4j Knowledge Graph</li>
+                    <li>Flask Backend</li>
+                    <li>NLP tiếng Việt</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+            <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+        </div>
+    </div>
+</footer>
+
+<script src="/static/js/auth.js"></script>
+<script src="/static/js/forum.js"></script>
+</body>
+</html>

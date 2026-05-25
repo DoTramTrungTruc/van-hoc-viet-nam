@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết tác giả</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/tac_gia_detail.css">
+    <link rel="stylesheet" href="/static/css/chatbot_graph.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+ 
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia" class="active">Tác giả</a></li>
+                <li><a href="/tac-pham">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+            </ul>
+        </div>
+    </nav>
+
+     <!-- Loading State -->
+     <div id="loading" class="loading-fullscreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Đang tải thông tin tác giả...</p>
+        </div>
+    </div>
+
+    <div id="content" style="display:none"> 
+        <section class="detail-hero">
+            <div class="breadcrumb">
+                <a href="/">Trang chủ</a> /
+                <a href="/tac-gia">Tác giả</a> /
+                <span id="breadcrumbTitle"></span>
+            </div>
+            <div class="hero-content hero-flex">
+                <div class="author-avatar">
+                    <img id="tacGiaImage" src="/static/images/default_cover.jpg" alt="Ảnh tác giả">
+                </div>
+                <div class="hero-info">
+                    
+            
+                    <h1 id="tacGiaTitle" class="detail-title"></h1>
+            
+                    <div class="detail-meta-cards">
+                        <div class="meta-card">
+                            <div class="meta-label">Năm sinh</div>
+                            <div id="namSinh" class="meta-value"></div>
+                        </div>
+            
+                        <div class="meta-card">
+                            <div class="meta-label">Năm mất</div>
+                            <div id="namMat" class="meta-value"></div>
+                        </div>
+            
+                        <div class="meta-card">
+                            <div class="meta-label">Quê quán</div>
+                            <div id="queQuan" class="meta-value"></div>
+                        </div>
+            
+                        <div class="meta-card">
+                            <div class="meta-label">Trường phái</div>
+                            <div id="truongPhai" class="meta-value"></div>
+                        </div>
+                         
+                    </div>
+                </div>
+            
+            </div>
+        </section>
+    
+        <section class="detail-content">
+            <div class="content-section">
+                <h2 class="section-title">📖 Tiểu sử</h2>
+                <p id="tieuSu"></p>
+            </div>
+            <div class="content-section extra-author-info">
+
+                <div class="info-box">
+                    <h2 class="section-title">✍️ Bút danh</h2>
+                    <p id="butDanhDetail"></p>
+                </div>
+            
+                <div class="info-box">
+                    <h2 class="section-title">🏆 Giải thưởng</h2>
+                    <p id="giaiThuongDetail"></p>
+                </div>
+            
+                <div class="info-box">
+                    <h2 class="section-title">💬 Câu nói nổi tiếng</h2>
+                    <blockquote id="cauNoiDetail"></blockquote>
+                </div>
+            
+            </div>
+            <div class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">🔗</div>
+                    <h2 class="section-title">Knowledge Graph - Trợ lý tác giả</h2>
+                </div>
+            
+                <div class="section-body">
+                    <div id="chatbotContainer" class="chatbot-container">
+                        
+                        <!-- Chat -->
+                        <div id="chatMessages" class="chat-messages">
+                            <div class="chat-message bot-message">
+                                <div class="message-icon">🤖</div>
+                                <div class="message-content">
+                                    <p>Xin chào! Hỏi tôi về tác giả này nhé!</p>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <!-- Graph -->
+                        <div id="network" class="graph-container"></div>
+            
+                        <!-- Input -->
+                        <div class="chat-input-container">
+                            <input type="text" 
+                                   id="chatInput" 
+                                   class="chat-input" 
+                                   placeholder="VD: Tác giả sinh năm nào? Có tác phẩm gì?">
+                            <button id="chatSend" class="chat-send-btn">
+                                <span>➤</span>
+                            </button>
+                        </div>
+            
+                    </div>
+                </div>
+            </div>
+        </section>
+    
+    </div>
+      <!-- Footer -->
+      <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+<script src="/static/js/tac_gia_detail.js"></script>
+<script src="/static/js/auth.js"></script>
+</body>
+</html>

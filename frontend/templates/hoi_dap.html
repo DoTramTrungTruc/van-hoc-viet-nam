@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hỏi đáp - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/hoi_dap.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham">Tác phẩm</a></li>
+                <li><a href="/hoi-dap" class="active">Hỏi đáp</a></li>
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+                <!-- Auth items will be added by auth.js -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="qa-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="container">
+                <h1 class="qa-title">💬 Hỏi đáp tự nhiên</h1>
+                <p class="qa-subtitle">Hỏi tôi bất kỳ điều gì về văn học Việt Nam!</p>
+                
+                <!-- Search Box -->
+                <div class="qa-search-box">
+                    <div class="search-container">
+                        <input type="text" 
+                               id="questionInput" 
+                               class="search-input"
+                               placeholder="Ví dụ: Truyện Kiều do ai sáng tác?" 
+                               onkeypress="handleEnter(event)">
+                        <button onclick="askQuestion()" class="search-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Hỏi ngay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <section class="qa-content">
+        <div class="container">
+            
+            <!-- Suggestions -->
+            <div class="suggestions-section">
+                <h3 class="suggestions-title">💡 Gợi ý câu hỏi</h3>
+                <div id="suggestionsList" class="suggestions-grid"></div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loadingBox" class="loading-state" style="display:none">
+                <div class="loading-spinner"></div>
+                <p>Đang xử lý câu hỏi của bạn...</p>
+            </div>
+
+            <!-- Results -->
+            <div id="resultsContainer" class="results-container" style="display:none">
+                <div class="results-grid">
+                    
+                    <!-- Text Answer -->
+                    <div class="result-card">
+                        <div class="card-header">
+                            <div class="card-icon">📝</div>
+                            <h3 class="card-title">Câu trả lời</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="answerText" class="answer-box"></div>
+                            <div id="detailsBox" class="details-box"></div>
+                        </div>
+                    </div>
+
+                    <!-- Graph Visualization -->
+                    <div class="result-card">
+                        <div class="card-header">
+                            <div class="card-icon">🔗</div>
+                            <h3 class="card-title">Đồ thị mối liên kết</h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="graphContainer" class="graph-container"></div>
+                            <div class="graph-legend">
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background:#607D8B"></span>
+                                    <span>Tác giả</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background:#8B4513"></span>
+                                    <span>Tác phẩm</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background:#E74C3C"></span>
+                                    <span>Nhân vật</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-dot" style="background:#27AE60"></span>
+                                    <span>Thể loại</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/graph-viz.js"></script>
+    <script src="/static/js/hoi_dap.js"></script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết Tác phẩm - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/tac_pham_detail.css">
+    <link rel="stylesheet" href="/static/css/chatbot_graph.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    <script src="https://unpkg.com/three"></script>
+    <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham" class="active">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+                <!-- Auth items will be added by auth.js -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Loading State -->
+    <div id="loading" class="loading-fullscreen">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <p>Đang tải thông tin tác phẩm...</p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="content" class="detail-page" style="display: none;">
+        
+        <!-- Hero Section -->
+        <section class="detail-hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <div class="container">
+                    <div class="breadcrumb">
+                        <a href="/">Trang chủ</a>
+                        <span>›</span>
+                        <a href="/tac-pham">Tác phẩm</a>
+                        <span>›</span>
+                        <span id="breadcrumbTitle">...</span>
+                    </div>
+                    
+                    <div class="detail-header-flex">
+                        
+                        <div class="detail-image">
+                            <h3>Ảnh bìa tác phẩm</h3>
+                            <img id="tacPhamImage" 
+                                 src="../static/images/default_cover.jpg" 
+                                 alt="Bìa tác phẩm"
+                                 onerror="this.src='../static/images/default_cover.jpg';">
+                                 
+                        </div>
+                        
+                        <div class="detail-info">
+                            <h1 class="detail-title" id="tacPhamTitle">...</h1>
+                           
+                            <div class="detail-meta-cards">
+                                <div class="meta-card">
+                                    <div class="meta-icon">✍️</div>
+                                    <div class="meta-content">
+                                        <div class="meta-label">Tác giả</div>
+                                        <div class="meta-value" id="tacGia">...</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="meta-card">
+                                    <div class="meta-icon">📅</div>
+                                    <div class="meta-content">
+                                        <div class="meta-label">Năm sáng tác</div>
+                                        <div class="meta-value" id="namSangTac">...</div>
+                                    </div>
+                                </div>
+        
+                                <div class="meta-card">
+                                    <div class="meta-icon">📘</div>
+                                    <div class="meta-content">
+                                        <div class="meta-label">Năm xuất bản</div>
+                                        <div class="meta-value" id="namXuatBan">...</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="meta-card">
+                                    <div class="meta-icon">⏳</div>
+                                    <div class="meta-content">
+                                        <div class="meta-label">Giai đoạn</div>
+                                        <div class="meta-value" id="giaiDoan">...</div>
+                                    </div>
+                                </div>
+        
+                                <div class="meta-card">
+                                    <div class="meta-icon">📚</div>
+                                    <div class="meta-content">
+                                        <div class="meta-label">Thể loại</div>
+                                        <div class="meta-value" id="theLoai">...</div>
+                                    </div>
+                                </div>
+                                <div class="favorite-container">
+                                    <button class="favorite-btn" onclick="toggleFavorite()">
+                                        <span class="heart-icon">❤️</span>
+                                        <span id="favoriteText">Yêu thích</span>
+                                    </button>
+                                </div>
+                                <div class="reading-mode-container">
+                                    <button class="reading-mode-btn" onclick="openReadingMode()">
+                                        📖 Chế độ đọc
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Content Sections -->
+        <section class="detail-content">
+            <div class="container">
+                
+                <!-- Nội dung tóm tắt -->
+                <div class="content-section" id="noiDungSection">
+                    <div class="section-header">
+                        <div class="section-icon">📖</div>
+                        <h2 class="section-title">Nội dung tóm tắt</h2>
+                    </div>
+                    <div class="section-body">
+                        <p class="section-text" id="noiDung">...</p>
+                    </div>
+                        <div id="trichDoanSection" style="display:none">
+                            <h2 class="section-title">📜 Trích đoạn tiêu biểu</h2>
+                            <div id="trichDoanList"></div>     
+                    </div>
+                </div>
+
+                <!-- Hoàn cảnh -->
+                <div class="content-section" id="hoanCanhSection" style="display: none;">
+                    <div class="section-header">
+                        <div class="section-icon">🌍</div>
+                        <h2 class="section-title">Hoàn cảnh sáng tác</h2>
+                    </div>
+                    <div class="section-body">
+                        <p class="section-text" id="hoanCanh">...</p>
+                    </div>
+                </div>
+
+                <!-- Chủ đề -->
+                <div class="content-section" id="chuDeSection" style="display: none;">
+                    <div class="section-header">
+                        <div class="section-icon">💡</div>
+                        <h2 class="section-title">Chủ đề chính</h2>
+                    </div>
+                    <div class="section-body">
+                        <div class="tags-list" id="chuDe"></div>
+                    </div>
+                </div>
+
+                <!-- Ý nghĩa -->
+                <div class="content-section" id="yNghiaSection" style="display: none;">
+                    <div class="section-header">
+                        <div class="section-icon">🎯</div>
+                        <h2 class="section-title">Ý nghĩa tác phẩm</h2>
+                    </div>
+                    <div class="section-body">
+                        <p class="section-text" id="yNghia">...</p>
+                    </div>
+                </div>
+
+                <!-- Giá trị nghệ thuật -->
+                <div class="content-section" id="giaTriSection" style="display: none;">
+                    <div class="section-header">
+                        <div class="section-icon">🎨</div>
+                        <h2 class="section-title">Giá trị nghệ thuật</h2>
+                    </div>
+                    <div class="section-body">
+                        <p class="section-text" id="giaTriNgheThuat">...</p>
+                    </div>
+                </div>
+
+                <!-- Nhân vật -->
+                <div class="content-section" id="nhanVatSection">
+                    <div class="section-header">
+                        <div class="section-icon">👥</div>
+                        <h2 class="section-title">Nhân vật trong tác phẩm</h2>
+                    </div>
+                    <div class="section-body">
+                        <div class="characters-grid" id="nhanVatGrid"></div>
+                    </div>
+                </div>
+
+                 <!-- Knowledge Graph -->
+                 <div class="content-section">
+                    <div class="section-header">
+                        <div class="section-icon">🔗</div>
+                        <h2 class="section-title">Knowledge Graph - Trợ lý thông minh</h2>
+                    </div>
+                    <div class="section-body">
+                        <!-- Chatbot Container -->
+                        <div id="chatbotContainer" class="chatbot-container">
+                            <!-- Messages Area -->
+                            <div id="chatMessages" class="chat-messages">
+                                <div class="chat-message bot-message">
+                                    <div class="message-icon">🤖</div>
+                                    <div class="message-content">
+                                        <p>Xin chào! Hỏi tôi về tác phẩm, nhân vật, hoặc tác giả nhé!</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Graph Visualization -->
+                            <div id="network" class="graph-container"></div>
+                            
+                            <!-- Input Area -->
+                            <div class="chat-input-container">
+                                <input type="text" 
+                                       id="chatInput" 
+                                       class="chat-input" 
+                                       placeholder="VD: Nhân vật chính là ai? Tác giả sinh năm nào?">
+                                <button id="chatSend" class="chat-send-btn">
+                                    <span>➤</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-section" id="quizSection">
+                    <div class="section-header">
+                        <div class="section-icon">🎮</div>
+                        <h2 class="section-title">Minigame - Trắc nghiệm</h2>
+                    </div>
+                
+                    <div class="section-body">
+                        <div id="quizContainer" class="quiz-container">
+                
+                            <div class="quiz-top">
+                                <span id="quizProgress">Câu 1</span>
+                                <span id="quizScore">Điểm: 0</span>
+                            </div>
+                
+                            <div id="quizQuestion" class="quiz-question">
+                                Đang tải câu hỏi...
+                            </div>
+                
+                            <div id="quizAnswers" class="quiz-answers"></div>
+                
+                            <div class="quiz-footer">
+                                <button id="nextBtn" onclick="nextQuiz()">Câu tiếp ➡️</button>
+                            </div>
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="content-section compare-section">
+
+                <div class="section-header">
+                    <div class="section-icon">⚔️</div>
+                    <h2 class="section-title">
+                        AI So sánh tác phẩm
+                    </h2>
+                </div>
+            
+                <div class="compare-controls">
+            
+                    <select id="compareSelect">
+            
+                        <option value="">
+                            -- Chọn tác phẩm --
+                        </option>
+            
+                    </select>
+            
+                    <button onclick="startCompare()">
+            
+                        ✨ So sánh bằng AI
+            
+                    </button>
+            
+                </div>
+            
+                <div id="compareResult">
+            
+                </div>
+            
+            </div>
+        </section>
+
+    </div>
+        <!-- READING MODE -->
+        <div id="readingMode" class="reading-mode">
+
+            <!-- TOPBAR -->
+            <div class="reading-topbar">
+
+                <button onclick="closeReadingMode()" class="reading-close">
+                    ✕
+                </button>
+
+                <div class="reading-controls">
+
+                    <button onclick="changeFontSize(-2)">A-</button>
+
+                    <button onclick="changeFontSize(2)">A+</button>
+
+                    <button onclick="toggleDarkReading()">
+                        🌙
+                    </button>
+
+                    <button onclick="toggleSpeech()" id="speechBtn">
+                        🔊 Đọc truyện
+                    </button>
+
+                    <input type="range"
+                        id="speechRate"
+                        min="0.5"
+                        max="2"
+                        step="0.1"
+                        value="1">
+
+                </div>
+
+                <div id="readingPercent">
+                    0%
+                </div>
+
+            </div>
+
+            <!-- PROGRESS -->
+            <div class="reading-progress">
+                <div id="readingBar"></div>
+            </div>
+
+            <!-- CONTENT -->
+            <div class="reading-content">
+
+                <h1 id="readingTitle"></h1>
+
+                <div class="reading-meta">
+                    <span id="readingAuthor"></span>
+                    •
+                    <span id="readingTime"></span>
+                </div>
+
+                <div id="readingText"></div>
+
+            </div>
+        </div>
+        <div id="aiCompareResult"></div>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="/static/js/tac_pham_detail.js"></script>
+    <div id="graphPopup" class="graph-popup"></div>
+</body>
+</html>

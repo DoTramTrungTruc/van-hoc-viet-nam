@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hồ sơ cá nhân - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+                <li><a href="/profile" class="active">Hồ sơ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="profile-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="container">
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                        <span class="avatar-icon">👤</span>
+                    </div>
+                    <div class="profile-info">
+                        <h1 class="profile-name" id="displayName">Đang tải...</h1>
+                        <p class="profile-username" id="displayUsername">@username</p>
+                        <p class="profile-email" id="displayEmail">email@example.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Profile Content -->
+    <section class="profile-content">
+        <div class="container">
+            <div id="alertContainer"></div>
+
+            <div class="content-grid">
+                <!-- Card 1: Thông tin tài khoản -->
+                <div class="profile-card">
+                    <div class="card-header">
+                        <div class="card-icon">📋</div>
+                        <h3>Thông tin tài khoản</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="updateInfoForm" onsubmit="updateUserInfo(event)">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" id="username" disabled>
+                                <small class="form-hint">Username không thể thay đổi</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Email *</label>
+                                <input type="email" name="email" id="email" required placeholder="your@email.com">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Họ và tên</label>
+                                <input type="text" name="full_name" id="full_name" placeholder="Nguyễn Văn A">
+                            </div>
+                            
+                            <button type="submit" class="btn-primary">
+                                <span class="btn-icon">💾</span>
+                                <span>Cập nhật thông tin</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Card 2: Đổi mật khẩu -->
+                <div class="profile-card">
+                    <div class="card-header">
+                        <div class="card-icon">🔒</div>
+                        <h3>Đổi mật khẩu</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="changePasswordForm" onsubmit="changePassword(event)">
+                            <div class="form-group">
+                                <label>Mật khẩu hiện tại *</label>
+                                <input type="password" name="old_password" required minlength="6" placeholder="••••••••">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Mật khẩu mới *</label>
+                                <input type="password" name="new_password" id="new_password" required minlength="6" placeholder="••••••••">
+                                <small class="form-hint">Tối thiểu 6 ký tự</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Xác nhận mật khẩu *</label>
+                                <input type="password" name="confirm_password" required minlength="6" placeholder="••••••••">
+                            </div>
+                            
+                            <button type="submit" class="btn-success">
+                                <span class="btn-icon">🔑</span>
+                                <span>Đổi mật khẩu</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="profile-card">
+                <div class="card-header">
+                    <div class="card-icon">❤️</div>
+                    <h3>Tác phẩm yêu thích</h3>
+                </div>
+                <div class="card-body">
+                    <div id="favoriteList" class="favorite-grid"></div>
+                </div>
+            </div>
+            <!-- Thông tin bổ sung -->
+            <div class="info-section">
+                <h3>💡 Gợi ý bảo mật</h3>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <div class="info-icon">🔐</div>
+                        <h4>Mật khẩu mạnh</h4>
+                        <p>Sử dụng ít nhất 8 ký tự, bao gồm chữ hoa, chữ thường, số và ký tự đặc biệt</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">📧</div>
+                        <h4>Email xác thực</h4>
+                        <p>Đảm bảo email luôn chính xác để nhận thông báo quan trọng</p>
+                    </div>
+                    <div class="info-card">
+                        <div class="info-icon">🔄</div>
+                        <h4>Thay đổi định kỳ</h4>
+                        <p>Nên đổi mật khẩu mỗi 3-6 tháng để tăng cường bảo mật</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/profile.js"></script>
+  
+</body>
+</html>

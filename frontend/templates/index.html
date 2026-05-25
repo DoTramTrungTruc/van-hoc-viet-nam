@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Văn Học Việt Nam - Kho Tàng Tri Thức</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/" class="active">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+                <!-- Auth items will be added by auth.js -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="container">
+                <h1 class="hero-title">
+                    <span class="title-highlight">Kho Tàng</span>
+                    <br>Văn Học Việt Nam
+                </h1>
+                <p class="hero-subtitle">
+                    "Văn chương là quốc hồn quốc túy của một dân tộc"
+                </p>
+                <p class="hero-description">
+                    Khám phá hành trình văn học từ truyền thống đến hiện đại
+                        qua hệ thống tri thức được xây dựng trên nền tảng Neo4j Knowledge Graph.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/tac-pham" class="hero-btn primary">
+                        📚 Khám phá tác phẩm
+                    </a>
+                
+                    <a href="/dien-dan" class="hero-btn secondary">
+                        💬 Tham gia diễn đàn
+                    </a>
+                </div>
+                <!-- Search Box -->
+                <!-- <div class="hero-search">
+                    <div class="search-container">
+                        <input type="text" 
+                               id="searchInput" 
+                               class="search-input"
+                               placeholder="Tìm kiếm tác phẩm, tác giả, nhân vật...">
+                        <button onclick="search()" class="search-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Tìm kiếm
+                        </button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        <div class="hero-pattern"></div>
+    </div>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">✍️</div>
+                    <div class="stat-number" id="statTacGia">-</div>
+                    <div class="stat-label">Tác Giả</div>
+                    <div class="stat-desc">Qua các thời kỳ</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📚</div>
+                    <div class="stat-number" id="statTacPham">-</div>
+                    <div class="stat-label">Tác Phẩm</div>
+                    <div class="stat-desc">Tiêu biểu</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-number" id="statNhanVat">-</div>
+                    <div class="stat-label">Nhân Vật</div>
+                    <div class="stat-desc">Điển hình</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🏛️</div>
+                    <div class="stat-number" id="statTheLoai">-</div>
+                    <div class="stat-label">Thể Loại</div>
+                    <div class="stat-desc">Văn học</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Works Section -->
+    <section class="featured-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tác Phẩm Tiêu Biểu</h2>
+                <p class="section-subtitle">Những kiệt tác văn học Việt Nam qua các thời kỳ</p>
+            </div>
+            
+            <div class="works-grid" id="tacPhamGrid">
+                <!-- Loading skeleton -->
+                <div class="work-card skeleton"></div>
+                <div class="work-card skeleton"></div>
+                <div class="work-card skeleton"></div>
+            </div>
+            
+            <div class="section-footer">
+                <a href="/tac-pham" class="btn-explore">
+                    Khám phá thêm
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Authors Highlight -->
+    <section class="authors-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tác Giả Nổi Bật</h2>
+                <p class="section-subtitle">Những ngòi bút tài hoa của văn học Việt Nam</p>
+            </div>
+            
+            <div class="authors-carousel">
+                <!-- Loading skeleton -->
+                <div class="author-card skeleton" style="min-height: 250px;"></div>
+                <div class="author-card skeleton" style="min-height: 250px;"></div>
+                <div class="author-card skeleton" style="min-height: 250px;"></div>
+                <div class="author-card skeleton" style="min-height: 250px;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Genres Section -->
+    <section class="genres-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Thể Loại Văn Học</h2>
+                <p class="section-subtitle">Khám phá đa dạng thể loại từ cổ điển đến hiện đại</p>
+            </div>
+            
+            <div class="genres-grid" id="theLoaiGrid">
+                <!-- Will be loaded by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Bắt đầu khám phá ngay</h2>
+                <p>Cùng tham gia diễn đàn thảo luận văn học Việt Nam</p>
+                <a href="/dien-dan" class="btn-cta">
+                    💬 Chia sẻ kiến thức cùng nhau
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/index.js"></script>
+</body>
+</html>

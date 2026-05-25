@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+                <li><a href="/login">Đăng nhập</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Auth Hero -->
+    <section class="auth-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="container">
+                <div class="auth-container">
+                    
+                    <!-- Decorative Quote -->
+                    <div class="auth-quote">
+                        <div class="quote-icon">✨</div>
+                        <p class="quote-text">"Học vấn là kho tàng vô giá"</p>
+                        <p class="quote-author">— Ngạn ngữ Việt Nam</p>
+                    </div>
+                    
+                    <!-- Auth Card -->
+                    <div class="auth-card">
+                        <div class="auth-header">
+                            <div class="auth-icon">📝</div>
+                            <h1 class="auth-title">Đăng ký</h1>
+                            <p class="auth-subtitle">Tạo tài khoản mới của bạn</p>
+                        </div>
+                        
+                        <!-- Alert Container -->
+                        <div id="alertContainer"></div>
+                        
+                        <!-- Register Form -->
+                        <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-icon">👤</span>
+                                    Username
+                                </label>
+                                <input type="text" 
+                                       name="username" 
+                                       class="form-input"
+                                       required 
+                                       autofocus
+                                       pattern="[a-zA-Z0-9_]{3,20}"
+                                       title="Username phải từ 3-20 ký tự, chỉ chứa chữ, số và dấu gạch dưới"
+                                       placeholder="Nhập username (3-20 ký tự)">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-icon">📧</span>
+                                    Email
+                                </label>
+                                <input type="email" 
+                                       name="email" 
+                                       class="form-input"
+                                       required 
+                                       placeholder="Nhập địa chỉ email">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-icon">✏️</span>
+                                    Họ và tên
+                                </label>
+                                <input type="text" 
+                                       name="full_name" 
+                                       class="form-input"
+                                       required 
+                                       placeholder="Nhập họ và tên đầy đủ">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-icon">🔒</span>
+                                    Mật khẩu
+                                </label>
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-input"
+                                       required
+                                       minlength="6"
+                                       placeholder="Nhập mật khẩu (tối thiểu 6 ký tự)">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-icon">🔑</span>
+                                    Xác nhận mật khẩu
+                                </label>
+                                <input type="password" 
+                                       name="confirm_password" 
+                                       class="form-input"
+                                       required
+                                       minlength="6"
+                                       placeholder="Nhập lại mật khẩu">
+                            </div>
+                            
+                            <button type="submit" class="btn-submit">
+                                <span class="btn-text">Đăng ký</span>
+                                <span class="btn-icon">→</span>
+                            </button>
+                        </form>
+                        
+                        <!-- Auth Links -->
+                        <div class="auth-links">
+                            <p>Đã có tài khoản? <a href="/login">Đăng nhập ngay</a></p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth-form.js"></script>
+</body>
+</html>

@@ -1,0 +1,905 @@
+/* =========================================
+   TAC GIA DETAIL - PREMIUM UI
+========================================= */
+
+:root{
+    --primary: #8B4513;
+    --secondary: #A0522D;
+    --gold: #D4A373;
+    --light: #FFF8F0;
+    --white: #ffffff;
+    --text: #2f2f2f;
+    --shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+/* ================= GLOBAL ================= */
+
+body{
+    background:
+        linear-gradient(to bottom, #f6efe7, #fff);
+    font-family: 'Merriweather', serif;
+    color: var(--text);
+    margin: 0;
+    padding: 0;
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .container{
+    max-width: 1300px;
+    margin: auto;
+    padding: 18px 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-brand{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon{
+    font-size: 30px;
+}
+
+.brand-text{
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    color: var(--primary);
+    font-weight: 700;
+}
+
+.nav-menu{
+    display: flex;
+    gap: 25px;
+    list-style: none;
+}
+
+.nav-menu a{
+    text-decoration: none;
+    color: #555;
+    font-weight: 600;
+    transition: 0.3s;
+    position: relative;
+}
+
+.nav-menu a:hover,
+.nav-menu a.active{
+    color: var(--primary);
+}
+
+.nav-menu a::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:-6px;
+    width:0;
+    height:2px;
+    background: var(--primary);
+    transition:0.3s;
+}
+
+.nav-menu a:hover::after{
+    width:100%;
+}
+
+/* ================= HERO ================= */
+
+.detail-hero{
+    position: relative;
+    overflow: hidden;
+    padding: 90px 30px 70px;
+    background:
+        linear-gradient(rgba(20,20,20,0.6), rgba(20,20,20,0.7)),
+        url('/static/images/library-bg.jpg') center/cover no-repeat;
+    border-radius: 0 0 45px 45px;
+}
+
+.detail-hero::before{
+    content:'';
+    position:absolute;
+    width:700px;
+    height:700px;
+    background: rgba(255,255,255,0.04);
+    border-radius:50%;
+    top:-300px;
+    right:-200px;
+}
+
+.hero-content{
+    position: relative;
+    z-index: 2;
+    max-width: 1300px;
+    margin: auto;
+}
+
+.hero-flex{
+    display:flex;
+    align-items:center;
+    gap:50px;
+    flex-wrap:wrap;
+}
+
+/* ================= BREADCRUMB ================= */
+
+.breadcrumb{
+    margin-bottom: 35px;
+    color: rgba(255,255,255,0.85);
+}
+
+.breadcrumb a{
+    color:#ffe6c7;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.breadcrumb a:hover{
+    color:#fff;
+}
+
+/* ================= AVATAR ================= */
+
+.author-avatar{
+    flex-shrink:0;
+}
+
+.author-avatar img{
+    width: 280px;
+    height: 380px;
+    object-fit: cover;
+
+    border-radius: 28px;
+
+    border: 6px solid rgba(255,255,255,0.15);
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,0.4),
+        0 0 0 10px rgba(255,255,255,0.05);
+
+    transition: 0.4s ease;
+}
+
+.author-avatar img:hover{
+    transform: scale(1.03) rotate(-1deg);
+}
+
+/* ================= INFO ================= */
+
+.hero-info{
+    flex:1;
+}
+
+/* ================= TITLE ================= */
+
+.detail-title{
+    font-family:'Playfair Display', serif;
+    font-size:4rem;
+    color:white;
+    margin-bottom:25px;
+    line-height:1.2;
+
+    text-shadow:
+        0 4px 15px rgba(0,0,0,0.4);
+}
+
+/* ================= META CARDS ================= */
+
+.detail-meta-cards{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px,1fr));
+    gap:20px;
+}
+
+.meta-card{
+    background: rgba(255,255,255,0.1);
+    border:1px solid rgba(255,255,255,0.15);
+
+    backdrop-filter: blur(12px);
+
+    padding:20px;
+    border-radius:20px;
+
+    transition:0.35s ease;
+
+    box-shadow:0 8px 25px rgba(0,0,0,0.1);
+}
+
+.meta-card:hover{
+    transform: translateY(-8px);
+    background: rgba(255,255,255,0.16);
+}
+
+.meta-label{
+    font-size:0.8rem;
+    text-transform:uppercase;
+    letter-spacing:1px;
+    color:#ffd7b0;
+    margin-bottom:10px;
+}
+
+.meta-value{
+    color:white;
+    font-size:1.05rem;
+    font-weight:700;
+    line-height:1.6;
+}
+
+/* ================= CONTENT ================= */
+
+.detail-content{
+    max-width:1300px;
+    margin:auto;
+    padding:50px 25px;
+}
+
+/* ================= SECTION ================= */
+
+.content-section{
+    background: var(--white);
+    border-radius:28px;
+    padding:40px;
+    margin-bottom:35px;
+
+    box-shadow: var(--shadow);
+
+    border:1px solid #f1e5d9;
+
+    transition:0.3s ease;
+}
+
+.content-section:hover{
+    transform: translateY(-4px);
+}
+
+/* ================= SECTION TITLE ================= */
+
+.section-title{
+    font-family:'Playfair Display', serif;
+    font-size:2rem;
+    color:var(--primary);
+
+    margin-bottom:22px;
+
+    position:relative;
+    padding-bottom:14px;
+}
+
+.section-title::after{
+    content:'';
+    position:absolute;
+    left:0;
+    bottom:0;
+
+    width:80px;
+    height:4px;
+
+    border-radius:10px;
+
+    background:
+        linear-gradient(to right, var(--primary), var(--gold));
+}
+
+/* ================= TIEU SU ================= */
+
+#tieuSu{
+    line-height:2;
+    font-size:1.08rem;
+    color:#444;
+    text-align:justify;
+}
+
+/* ================= EXTRA INFO ================= */
+
+.extra-author-info{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px,1fr));
+    gap:30px;
+}
+
+.info-box{
+    background:
+        linear-gradient(to bottom right, #fffaf5, #ffffff);
+
+    border-radius:24px;
+    padding:30px;
+
+    border:1px solid #f2dfcb;
+
+    position:relative;
+    overflow:hidden;
+
+    transition:0.35s;
+}
+
+.info-box::before{
+    content:'';
+    position:absolute;
+
+    width:140px;
+    height:140px;
+
+    border-radius:50%;
+
+    background: rgba(212,163,115,0.12);
+
+    top:-50px;
+    right:-40px;
+}
+
+.info-box:hover{
+    transform:translateY(-10px);
+    box-shadow:0 18px 40px rgba(0,0,0,0.08);
+}
+
+.info-box p{
+    line-height:1.9;
+    color:#444;
+}
+
+/* ================= QUOTE ================= */
+
+blockquote{
+    margin:0;
+    position:relative;
+    padding-left:28px;
+
+    font-style:italic;
+    line-height:2;
+    color:#5b3a1d;
+
+    border-left:5px solid var(--gold);
+}
+
+blockquote::before{
+    content:'“';
+    position:absolute;
+    left:-5px;
+    top:-20px;
+
+    font-size:70px;
+    color: rgba(139,69,19,0.15);
+}
+
+/* ================= GRAPH ================= */
+
+.graph-container{
+    width:100%;
+    height:650px;
+
+    border-radius:25px;
+
+    background:
+        linear-gradient(to bottom right, #fff, #faf6f2);
+
+    border:1px solid #eee;
+
+    box-shadow:
+        inset 0 0 25px rgba(0,0,0,0.03),
+        0 10px 25px rgba(0,0,0,0.04);
+
+    transition:0.3s;
+}
+
+.graph-container:hover{
+    box-shadow:
+        inset 0 0 25px rgba(0,0,0,0.03),
+        0 18px 40px rgba(139,69,19,0.12);
+}
+
+/* ================= CHAT ================= */
+
+.chatbot-container{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+}
+
+.chat-messages{
+    background:#faf7f3;
+    border-radius:20px;
+    padding:20px;
+    max-height:350px;
+    overflow-y:auto;
+    border:1px solid #eee;
+}
+
+.chat-message{
+    display:flex;
+    gap:14px;
+    margin-bottom:18px;
+}
+
+.message-icon{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+
+    background:linear-gradient(to right, var(--primary), var(--secondary));
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+    font-size:18px;
+
+    flex-shrink:0;
+}
+
+.message-content{
+    background:white;
+    padding:15px 18px;
+    border-radius:18px;
+
+    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+
+    line-height:1.7;
+}
+
+/* ================= INPUT ================= */
+
+.chat-input-container{
+    display:flex;
+    gap:15px;
+}
+
+.chat-input{
+    flex:1;
+    border:none;
+    border-radius:16px;
+    padding:18px 20px;
+
+    background:#faf7f3;
+
+    font-size:15px;
+
+    outline:none;
+
+    transition:0.3s;
+}
+
+.chat-input:focus{
+    background:white;
+    box-shadow:0 0 0 4px rgba(139,69,19,0.12);
+}
+
+.chat-send-btn{
+    width:65px;
+    border:none;
+    border-radius:18px;
+
+    background:
+        linear-gradient(to right, var(--primary), var(--secondary));
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.chat-send-btn:hover{
+    transform:scale(1.06);
+    box-shadow:0 10px 25px rgba(139,69,19,0.3);
+}
+
+/* ================= LOADING ================= */
+
+.loading-fullscreen{
+    position:fixed;
+    inset:0;
+
+    background:
+        linear-gradient(to bottom right, #5c4033, #8B4513);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    z-index:9999;
+}
+
+.loading-content{
+    text-align:center;
+    color:white;
+}
+
+.loading-spinner{
+    width:70px;
+    height:70px;
+
+    border:6px solid rgba(255,255,255,0.2);
+    border-top:6px solid white;
+
+    border-radius:50%;
+
+    animation:spin 1s linear infinite;
+
+    margin:auto auto 20px;
+}
+
+@keyframes spin{
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+
+    .hero-flex{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .detail-title{
+        font-size:2.8rem;
+    }
+
+    .author-avatar img{
+        width:230px;
+        height:320px;
+    }
+
+    .detail-meta-cards{
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:600px){
+
+    .detail-hero{
+        padding:60px 20px;
+    }
+
+    .content-section{
+        padding:25px;
+    }
+
+    .detail-title{
+        font-size:2.2rem;
+    }
+
+    .section-title{
+        font-size:1.6rem;
+    }
+
+    .graph-container{
+        height:450px;
+    }
+}
+
+/* =========================================
+   EXTRA AUTHOR INFO
+========================================= */
+
+.extra-author-info{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+    gap: 28px;
+    margin-top: 40px;
+}
+
+/* ===== CARD ===== */
+
+.info-box{
+    background: #fff;
+    border-radius: 24px;
+    padding: 30px;
+
+    border: 1px solid #eee;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.06);
+
+    transition: all .35s ease;
+
+    position: relative;
+    overflow: hidden;
+}
+
+.info-box::before{
+    content:'';
+    position:absolute;
+
+    width:160px;
+    height:160px;
+
+    background:
+        radial-gradient(
+            rgba(210,105,30,0.12),
+            transparent 70%
+        );
+
+    top:-70px;
+    right:-70px;
+
+    border-radius:50%;
+}
+
+.info-box:hover{
+    transform: translateY(-8px);
+    box-shadow:
+        0 20px 45px rgba(139,69,19,0.12);
+}
+
+/* ===== TITLE ===== */
+
+.info-box .section-title{
+    font-size: 1.5rem;
+    margin-bottom: 24px;
+    color: #8B4513;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+/* ===== CONTENT ===== */
+
+.info-box p,
+.info-box blockquote{
+    margin:0;
+}
+
+/* =========================================
+   BÚT DANH
+========================================= */
+
+#butDanhDetail{
+    background:
+        linear-gradient(
+            135deg,
+            #fff8f1,
+            #fffdfb
+        );
+
+    border: 1px dashed rgba(210,105,30,0.4);
+
+    border-radius: 16px;
+
+    padding: 22px;
+
+    font-size: 1.08rem;
+    line-height: 2;
+    color: #5c3b22;
+
+    text-align: justify;
+}
+
+/* =========================================
+   GIẢI THƯỞNG
+========================================= */
+
+#giaiThuongDetail{
+    background:
+        linear-gradient(
+            135deg,
+            #fffaf2,
+            #ffffff
+        );
+
+    border-radius: 16px;
+
+    padding: 24px;
+
+    line-height: 2.1;
+    color: #4a4036;
+
+    border-left: 5px solid #d28a45;
+
+    text-align: justify;
+
+    position: relative;
+}
+
+#giaiThuongDetail::before{
+    content:'🏆';
+    position:absolute;
+
+    top:18px;
+    right:18px;
+
+    font-size:1.5rem;
+    opacity:.25;
+}
+
+.info-box:last-child{
+    grid-column: 1 / -1;
+}
+#cauNoiDetail .literary-paragraph{ 
+    text-align: justify; 
+    font-size: 1.2rem; 
+    line-height: 2.1; 
+    color: #4a4036; 
+    text-indent: 2em; 
+    margin-top: 25px; }
+#cauNoiDetail .literary-quote{
+     max-width: 100%; 
+     margin: 0 auto 35px; 
+     text-align: center; 
+     font-family: 'Crimson Text', serif; 
+     font-size: 1.5rem; line-height: 2.2; 
+     font-style: italic; 
+     color: #7a3e16; 
+     background: transparent; 
+     border: none; 
+     box-shadow: none; 
+     padding: 0; }
+/* style quote */
+#cauNoiDetail{
+    position: relative;
+
+    width: 100%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff9f3,
+            #ffffff
+        );
+
+    border-radius: 24px;
+
+    padding: 55px 60px;
+
+    border: 1px solid rgba(210,105,30,0.25);
+
+    font-family: 'Crimson Text', serif;
+    font-size: 1.7rem;
+    line-height: 2.2;
+    font-style: italic;
+
+    color: #7a3e16;
+
+    text-align: center;
+
+    box-shadow:
+        0 15px 40px rgba(139,69,19,0.08),
+        inset 0 0 0 1px rgba(255,255,255,0.5);
+
+    overflow: hidden;
+}
+
+/* quote icon */
+#cauNoiDetail::before{
+    content:'❝';
+
+    position:absolute;
+
+    top:-25px;
+    left:25px;
+
+    font-size:7rem;
+
+    color:rgba(210,105,30,0.12);
+}
+
+#cauNoiDetail::after{
+    content:'❞';
+
+    position:absolute;
+
+    bottom:-70px;
+    right:25px;
+
+    font-size:7rem;
+
+    color:rgba(210,105,30,0.12);
+}
+
+/* hover */
+#cauNoiDetail:hover{
+    transform: scale(1.01);
+    transition: .3s ease;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 768px) {
+
+    .extra-author-info {
+        grid-template-columns: 1fr;
+    }
+
+    .info-box {
+        padding: 24px;
+    }
+
+    #cauNoiDetail {
+        font-size: 1.15rem;
+        line-height: 1.8;
+        padding: 24px;
+    }
+
+    #cauNoiDetail::before,
+    #cauNoiDetail::after {
+        font-size: 4rem;
+    }
+}
+/* ===== PARAGRAPH ===== */
+.literary-paragraph {
+    font-family: 'Crimson Text', serif;
+    font-size: 1.18rem;
+    line-height: 2.2;
+
+    color: #4b3b30;
+    text-align: justify;
+
+    margin-bottom: 28px;
+    text-indent: 2.5em;
+
+    letter-spacing: 0.3px;
+}
+
+/* ===== QUOTE ===== */
+.literary-quote {
+    position: relative;
+
+    margin: 40px auto;
+    padding: 35px;
+
+    max-width: 85%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #fffdf9,
+            #fff7ef
+        );
+
+    border: 1px dashed rgba(160,82,45,0.4);
+    border-radius: 18px;
+
+    text-align: center;
+
+    font-family: 'Crimson Text', serif;
+    font-size: 1.3rem;
+    line-height: 2.2;
+    font-style: italic;
+
+    color: #8B4513;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* dấu quote */
+.literary-quote::before {
+    content: "❝";
+    position: absolute;
+
+    top: -18px;
+    left: 20px;
+
+    font-size: 3rem;
+    color: rgba(139,69,19,0.2);
+}
+
+.literary-quote::after {
+    content: "❞";
+    position: absolute;
+
+    bottom: -30px;
+    right: 20px;
+
+    font-size: 3rem;
+    color: rgba(139,69,19,0.2);
+}
+

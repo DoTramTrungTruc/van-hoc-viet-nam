@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/auth.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+                <li><a href="/register">Đăng ký</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Auth Hero -->
+    <section class="auth-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="container">
+                <div class="auth-container">
+                    
+                    <!-- Auth Card -->
+                    <div class="auth-card">
+                        <div class="auth-header">
+                            <div class="auth-icon">🔐</div>
+                            <h1 class="auth-title">Đăng nhập</h1>
+                            <p class="auth-subtitle">Chào mừng bạn trở lại!</p>
+                        </div>
+                        
+                        <!-- Alert Container -->
+                        <div id="alertContainer"></div>
+                        
+                        <!-- Login Form -->
+                        <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-icon">👤</span>
+                                    Username hoặc Email
+                                </label>
+                                <input type="text" 
+                                       name="username" 
+                                       class="form-input"
+                                       required 
+                                       autofocus 
+                                       placeholder="Nhập username hoặc email">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">
+                                    <span class="label-icon">🔒</span>
+                                    Mật khẩu
+                                </label>
+                                <input type="password" 
+                                       name="password" 
+                                       class="form-input"
+                                       required 
+                                       placeholder="Nhập mật khẩu">
+                                    <div style="text-align:right;margin-top:.4rem">
+                                        <a href="/forgot-password"
+                                           style="font-size:.85rem;color:#8B4513;text-decoration:none;font-weight:600">
+                                            🔑 Quên mật khẩu?
+                                        </a>
+                                    </div>
+                            </div>
+                            
+                            <button type="submit" class="btn-submit">
+                                <span class="btn-text">Đăng nhập</span>
+                                <span class="btn-icon">→</span>
+                            </button>
+                        </form>
+                        
+                        <!-- Auth Links -->
+                        <div class="auth-links">
+                            <p>Chưa có tài khoản? <a href="/register">Đăng ký ngay</a></p>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative Quote -->
+                    <div class="auth-quote">
+                        <div class="quote-icon">📚</div>
+                        <p class="quote-text">"Văn chương là cái kim chỉ nam của tư tưởng"</p>
+                        <p class="quote-author">— Phan Bội Châu</p>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth-form.js"></script>
+</body>
+</html>

@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản trị - Văn Học Việt Nam</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="/static/css/common.css">
+    <link rel="stylesheet" href="/static/css/admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Merriweather:wght@300;400;700&family=Crimson+Text:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="brand-icon">📖</span>
+                <span class="brand-text">Văn Học Việt Nam</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/">Trang chủ</a></li>
+                <li><a href="/tac-gia">Tác giả</a></li>
+                <li><a href="/tac-pham">Tác phẩm</a></li>
+                <!-- <li><a href="/hoi-dap">Hỏi đáp</a></li> -->
+                <li><a href="/dien-dan">Diễn đàn</a></li>
+                <li><a href="/admin" class="active">Quản trị</a></li>
+                <!-- Auth items will be added by auth.js -->
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Admin Hero -->
+    <section class="admin-hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <div class="container">
+                <h1 class="admin-title">👑 Trang Quản trị</h1>
+                <p class="admin-subtitle">Quản lý nội dung và người dùng hệ thống</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Admin Content -->
+    <section class="admin-content">
+        <div class="container">
+            
+            <!-- Tabs -->
+            <div class="admin-tabs">
+                <button onclick="showTab('users')" id="tab-users" class="tab-btn active">
+                    <span class="tab-icon">👥</span>
+                    <span class="tab-text">Người dùng</span>
+                </button>
+                <button onclick="showTab('tac-gia')" id="tab-tac-gia" class="tab-btn">
+                    <span class="tab-icon">✍️</span>
+                    <span class="tab-text">Tác giả</span>
+                </button>
+                <button onclick="showTab('tac-pham')" id="tab-tac-pham" class="tab-btn">
+                    <span class="tab-icon">📚</span>
+                    <span class="tab-text">Tác phẩm</span>
+                </button>
+                <button onclick="showTab('thong-ke')" id="tab-thong-ke" class="tab-btn">
+                    <span class="tab-icon">📊</span>
+                    <span class="tab-text">Thống kê</span>
+                </button>
+                <button onclick="showTab('excel')" id="tab-excel" class="tab-btn"> 
+                    <span class="tab-icon">📊</span>
+                    <span class="tab-text">Xuất/Nhập dữ liệu</span> 
+                </button>
+            </div>
+
+            <!-- Alert Container -->
+            <div id="alertContainer"></div>
+
+            <!-- TAB: USERS -->
+            <div id="content-users" class="tab-content active">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3>👥 Quản lý Người dùng</h3>
+                        <button onclick="openUserModal()" class="btn-add">
+                            <span>+</span> Thêm người dùng
+                        </button>
+                    </div>
+                    
+                    <div class="card-body">
+                    <div style="margin-bottom:10px">
+                        <input type="text" placeholder="🔍 Tìm user..."
+                        oninput="searchUsers(this.value)"
+                        class="search-box">
+                    </div>
+                        <div class="table-responsive">
+                            <table class="admin-table" id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Username</th>
+                                        <th>Email</th>
+                                        <th>Họ tên</th>
+                                        <th>Vai trò</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody">
+                                    <tr>
+                                        <td colspan="8" class="text-center">Đang tải...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="usersPagination" style="margin-top:10px"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: TÁC GIẢ -->
+            <div id="content-tac-gia" class="tab-content">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3>✍️ Quản lý Tác giả</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="detail-section">
+                            <h3 id="tacGiaFormTitle">➕ Thêm Tác giả mới</h3>
+                            <form id="formTacGia" onsubmit="saveTacGia(event)">
+                                <input type="hidden" id="tacGiaEditMode" value="false">
+                                <input type="hidden" id="tacGiaOldName" value="">
+                                <div class="form-group">
+                                    <label>Tên tác giả *</label>
+                                    <input type="text" name="ten" id="tacGiaTen" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Ảnh đại diện (URL)</label>
+                                    <input type="url" name="anh_dai_dien" id="tacGiaAnhDaiDien" 
+                                           placeholder="https://example.com/image.jpg"
+                                           onchange="previewTacGiaImage(this.value)">
+                                    <small style="color:#7f8c8d;font-size:0.85rem">Nhập link ảnh từ internet hoặc để trống</small>
+                                    
+                                    <!-- Preview ảnh -->
+                                    <div id="tacGiaImagePreview" style="margin-top:1rem;display:none">
+                                        <img id="tacGiaPreviewImg" 
+                                             src="" 
+                                             alt="Preview" 
+                                             style="max-width:200px;max-height:200px;border-radius:50%;box-shadow:0 4px 12px rgba(0,0,0,0.15);object-fit:cover"
+                                             onerror="this.parentElement.style.display='none'">
+                                        <button type="button" onclick="clearTacGiaImage()" 
+                                                class="btn btn-danger" 
+                                                style="display:block;margin-top:0.5rem;padding:0.4rem 1rem;font-size:0.85rem">
+                                            🗑️ Xóa ảnh
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+                                    <div class="form-group">
+                                        <label>Năm sinh</label>
+                                        <input type="number" name="nam_sinh" min="1000" max="2026">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Năm mất</label>
+                                        <input type="number" name="nam_mat" min="1000" max="2026">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Quê quán</label>
+                                    <input type="text" name="que_quan">
+                                </div>
+                                <div class="form-group">
+                                    <label>Trường phái</label>
+                                    <input type="text" name="truong_phai">
+                                </div>
+                                <div class="form-group">
+                                    <label>Tiểu sử</label>
+                                    <textarea name="tieu_su" rows="4"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>Bút danh</label>
+                                    <input type="text" name="but_danh">
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Giải thưởng</label>
+                                    <textarea name="giai_thuong"></textarea>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Câu nói nổi tiếng</label>
+                                    <textarea name="cau_noi_noi_tieng"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-success">✓ Lưu</button>
+                                <button type="button" onclick="cancelEditTacGia()" class="btn" style="background:#95a5a6;color:white">✕ Hủy</button>
+                            </form>
+                        </div>
+            
+                        <div class="detail-section">
+                            <h3>📋 Danh sách tác giả</h3>
+                            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                                <input type="text" id="searchTacGia" placeholder="🔍 Tìm tác giả..." class="search-box">
+                            </div>
+                            <div id="tacGiaList"><div class="loading">Đang tải...</div></div>
+                            <div id="tacGiaPagination" style="margin-top:10px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB: TÁC PHẨM -->
+            <div id="content-tac-pham" class="tab-content">
+                <div class="admin-card">
+                    <div class="card-header">
+                        <h3>📚 Quản lý Tác phẩm</h3>
+                    </div>
+                    <div class="card-body">
+                         <div class="detail-section">
+                <h3 id="tacPhamFormTitle">➕ Thêm Tác phẩm mới</h3>
+                <form id="formTacPham" onsubmit="saveTacPham(event)">
+                    <input type="hidden" id="tacPhamEditMode" value="false">
+                    <input type="hidden" id="tacPhamOldName" value="">
+                    <div class="form-group">
+                        <label>Tên tác phẩm *</label>
+                        <input type="text" name="ten" id="tacPhamTen" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ảnh đại diện (URL)</label>
+                        <input type="url" name="anh_dai_dien" id="tacPhamAnhDaiDien" 
+                               placeholder="https://example.com/image.jpg"
+                               onchange="previewTacPhamImage(this.value)">
+                        <small style="color:#7f8c8d;font-size:0.85rem">Nhập link ảnh từ internet hoặc để trống</small>
+                        
+                        <!-- Preview ảnh -->
+                        <div id="tacPhamImagePreview" style="margin-top:1rem;display:none">
+                            <img id="tacPhamPreviewImg" 
+                                 src="" 
+                                 alt="Preview" 
+                                 style="max-width:200px;max-height:280px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.15);object-fit:cover"
+                                 onerror="this.parentElement.style.display='none'">
+                            <button type="button" onclick="clearTacPhamImage()" 
+                                    class="btn btn-danger" 
+                                    style="display:block;margin-top:0.5rem;padding:0.4rem 1rem;font-size:0.85rem">
+                                🗑️ Xóa ảnh
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tác giả</label>
+                        <select name="tac_gia" id="tacPhamTacGia">
+                            <option value="">-- Chọn tác giả --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Năm sáng tác</label>
+                        <input type="number" name="nam_sang_tac" min="1000" max="2026">
+                    </div>
+                    <div class="form-group">
+                        <label>Năm xuất bản</label>
+                        <input type="number" name="nam_xuat_ban" min="1000" max="2026">
+                    </div>
+                    <div class="form-group">
+                        <label>Giai đoạn văn học</label>
+                        <select id="tacPhamGiaiDoan" name="giai_doan">
+                            <option value="">-- Chọn giai đoạn --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Thể loại</label>
+                        <select name="the_loai" id="tacPhamTheLoai">
+                            <option value="">-- Chọn thể loại --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nhân vật chính</label>
+                        <div id="nhanVatContainer">
+                            <div class="nhan-vat-item" style="display:flex;gap:0.5rem;margin-bottom:0.5rem;align-items:flex-start">
+                                <input type="text" class="nhan-vat-ten" placeholder="Tên nhân vật" 
+                                       style="flex:1">
+                                <input type="text" class="nhan-vat-vai-tro" placeholder="Vai trò (VD: nhân vật chính)" 
+                                       style="flex:1">
+                                <input type="text" class="nhan-vat-tinh-cach"  placeholder="Tính cách (VD: hiền lành, mạnh mẽ)" style="flex:1">
+                                                      
+                                <select class="nhan-vat-target" style="flex:1">
+                                    <option value="">-- Liên kết với ai --</option>
+                                </select>
+
+               
+                                <input type="text" class="nhan-vat-quan-he" placeholder="Quan hệ (yêu, thù...)" style="flex:1">
+
+                                <button type="button" onclick="removeNhanVat(this)" 
+                                        class="btn btn-danger" style="padding:0.5rem;font-size:0.85rem">✕</button>
+                            </div>
+                        </div>
+                        <button type="button" onclick="addNhanVat()" 
+                                class="btn" style="background:#3498db;color:white;margin-top:0.5rem">
+                            ➕ Thêm nhân vật
+                        </button>
+                    </div>
+                    <div class="form-group">
+                        <label>Nội dung tóm tắt</label>
+                        <textarea name="noi_dung_tom_tat" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Chủ đề chính</label>
+                        <input type="text" name="chu_de_chinh">
+                    </div>
+                    <div class="form-group">
+                        <label>Ý nghĩa</label>
+                        <textarea name="y_nghia" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Giá trị nghệ thuật</label>
+                        <textarea name="gia_tri_nghe_thuat" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Hoàn cảnh</label>
+                        <textarea name="hoan_canh" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Cấu trúc</label>
+                        <textarea name="cau_truc" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>📜 Trích đoạn văn/thơ tiêu biểu</label>
+                        <div id="trichDoanContainer"></div>
+                        <button type="button" onclick="addTrichDoan()" class="btn" style="background:#E67E22;color:white;margin-top:0.5rem">+ Thêm trích đoạn</button>
+                    </div>
+                    <button type="submit" class="btn btn-success">✓ Lưu</button>
+                    <button type="button" onclick="cancelEditTacPham()" class="btn" style="background:#95a5a6;color:white">✕ Hủy</button>
+                </form>
+            </div>
+
+            <div class="detail-section">
+                <h3>📋 Danh sách tác phẩm</h3>
+                <input type="text" id="searchTacPham"
+                placeholder="🔍 Tìm tác phẩm..."
+                class="search-box">
+                <div id="tacPhamList"><div class="loading">Đang tải...</div></div>
+                <div id="tacPhamPagination" style="margin-top:10px"></div>
+            </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- TAB EXCEL IMPORT / EXPORT -->
+        <div id="content-excel" class="tab-content" style="display:none">
+            <div class="admin-card">
+                <div class="card-header" style="background:linear-gradient(135deg,#1D6F42,#2E7D32)">
+                    <h3 style="color:#fff">📊 Nhập / Xuất Dữ liệu Excel</h3>
+                </div>
+                <div class="card-body">
+ 
+                    <!-- XUẤT EXCEL -->
+                    <div class="detail-section" style="border-left:5px solid #1D6F42">
+                        <h3 style="color:#1D6F42">⬇️ Xuất dữ liệu ra Excel</h3>
+                        <p style="color:#555;margin-bottom:1.5rem">
+                            Xuất toàn bộ dữ liệu ra file <strong>.xlsx</strong> với định dạng đẹp,
+                            có thể mở bằng Microsoft Excel hoặc Google Sheets.
+                        </p>
+ 
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1.5rem">
+                            <!-- Xuất tất cả -->
+                            <div class="excel-export-card" style="border:2px solid #1D6F42;border-radius:12px;padding:1.5rem;text-align:center;background:#f0faf4">
+                                <div style="font-size:3rem;margin-bottom:.5rem">📋</div>
+                                <h4 style="color:#1D6F42;margin-bottom:.5rem">Tất cả dữ liệu</h4>
+                                <p style="font-size:.85rem;color:#666;margin-bottom:1rem">4 sheets: Tác giả, Tác phẩm, Nhân vật, Thể loại</p>
+                                <button onclick="exportExcel('all')" class="btn-excel-export" style="background:#1D6F42">
+                                    ⬇️ Xuất tất cả
+                                </button>
+                            </div>
+ 
+                            <!-- Xuất tác giả -->
+                            <div class="excel-export-card" style="border:2px solid #8B4513;border-radius:12px;padding:1.5rem;text-align:center;background:#fdf6ec">
+                                <div style="font-size:3rem;margin-bottom:.5rem">✍️</div>
+                                <h4 style="color:#8B4513;margin-bottom:.5rem">Chỉ Tác giả</h4>
+                                <p style="font-size:.85rem;color:#666;margin-bottom:1rem">Xuất danh sách tác giả kèm thông tin chi tiết</p>
+                                <button onclick="exportExcel('tac-gia')" class="btn-excel-export" style="background:#8B4513">
+                                    ⬇️ Xuất Tác giả
+                                </button>
+                            </div>
+ 
+                            <!-- Xuất tác phẩm -->
+                            <div class="excel-export-card" style="border:2px solid #1565C0;border-radius:12px;padding:1.5rem;text-align:center;background:#eff6ff">
+                                <div style="font-size:3rem;margin-bottom:.5rem">📖</div>
+                                <h4 style="color:#1565C0;margin-bottom:.5rem">Chỉ Tác phẩm</h4>
+                                <p style="font-size:.85rem;color:#666;margin-bottom:1rem">Xuất danh sách tác phẩm với đầy đủ thông tin</p>
+                                <button onclick="exportExcel('tac-pham')" class="btn-excel-export" style="background:#1565C0">
+                                    ⬇️ Xuất Tác phẩm
+                                </button>
+                            </div>
+ 
+                            <!-- Template rỗng -->
+                            <div class="excel-export-card" style="border:2px solid #6A1B9A;border-radius:12px;padding:1.5rem;text-align:center;background:#f5f0ff">
+                                <div style="font-size:3rem;margin-bottom:.5rem">📝</div>
+                                <h4 style="color:#6A1B9A;margin-bottom:.5rem">Template nhập liệu</h4>
+                                <p style="font-size:.85rem;color:#666;margin-bottom:1rem">File mẫu rỗng để nhập dữ liệu mới vào hệ thống</p>
+                                <button onclick="exportExcel('template')" class="btn-excel-export" style="background:#6A1B9A">
+                                    ⬇️ Tải Template
+                                </button>
+                            </div>
+                        </div>
+ 
+                        <!-- Loading indicator -->
+                        <div id="exportLoading" style="display:none;text-align:center;padding:1rem">
+                            <div class="loading"></div>
+                            <span style="color:#1D6F42;font-weight:600">Đang xuất file, vui lòng chờ...</span>
+                        </div>
+                    </div>
+ 
+                    <!-- NHẬP EXCEL -->
+                    <div class="detail-section" style="border-left:5px solid #1565C0;margin-top:2rem">
+                        <h3 style="color:#1565C0">⬆️ Nhập dữ liệu từ Excel</h3>
+                        <p style="color:#555;margin-bottom:1rem">
+                            Tải lên file <strong>.xlsx</strong> đã chỉnh sửa để cập nhật hoặc thêm mới dữ liệu vào hệ thống.
+                            Dữ liệu trùng tên sẽ được <strong>cập nhật</strong>, dữ liệu mới sẽ được <strong>thêm vào</strong>.
+                        </p>
+ 
+                        <!-- Hướng dẫn -->
+                        <div style="background:#fff3e0;border:1px solid #FF9800;border-radius:8px;padding:1rem;margin-bottom:1.5rem">
+                            <p style="margin:0;font-size:.9rem;color:#E65100">
+                                ⚠️ <strong>Lưu ý:</strong> Chỉ import file từ chức năng "Xuất tất cả" hoặc "Tải Template" ở trên.
+                                Không thay đổi tên cột hoặc cấu trúc file.
+                            </p>
+                        </div>
+ 
+                        <!-- Upload area -->
+                        <div id="dropZone"
+                             style="border:3px dashed #1565C0;border-radius:16px;padding:3rem;text-align:center;
+                                    background:#f8fbff;cursor:pointer;transition:all .3s"
+                             onclick="document.getElementById('excelFileInput').click()"
+                             ondragover="handleDragOver(event)"
+                             ondrop="handleDrop(event)"
+                             ondragleave="handleDragLeave(event)">
+                            <div style="font-size:3.5rem;margin-bottom:1rem">📂</div>
+                            <p style="font-size:1.1rem;color:#1565C0;font-weight:600;margin:0">
+                                Kéo thả file Excel vào đây
+                            </p>
+                            <p style="font-size:.9rem;color:#888;margin:.5rem 0 0">
+                                hoặc nhấn để chọn file (.xlsx)
+                            </p>
+                            <input type="file" id="excelFileInput" accept=".xlsx"
+                                   style="display:none" onchange="handleFileSelect(this)">
+                        </div>
+ 
+                        <!-- File selected preview -->
+                        <div id="filePreview" style="display:none;margin-top:1rem;padding:1rem;
+                             background:#e8f5e9;border-radius:8px;border:1px solid #4CAF50">
+                            <div style="display:flex;align-items:center;gap:1rem">
+                                <span style="font-size:2rem">📄</span>
+                                <div style="flex:1">
+                                    <div id="fileName" style="font-weight:700;color:#2E7D32"></div>
+                                    <div id="fileSize" style="font-size:.85rem;color:#666"></div>
+                                </div>
+                                <button onclick="clearFile()" style="background:#e53935;color:white;
+                                        border:none;border-radius:6px;padding:.4rem .8rem;cursor:pointer">
+                                    ✕ Xóa
+                                </button>
+                            </div>
+                        </div>
+ 
+                        <!-- Import options -->
+                        <div style="margin-top:1.5rem;display:flex;gap:1rem;align-items:center;flex-wrap:wrap">
+                            <button id="importBtn" onclick="importExcel()"
+                                    class="btn btn-success" disabled
+                                    style="padding:.8rem 2rem;font-size:1rem;
+                                           opacity:.5;cursor:not-allowed;background:#1565C0">
+                                ⬆️ Bắt đầu Import
+                            </button>
+                            <span style="font-size:.85rem;color:#888">
+                                Hệ thống sẽ tự nhận biết sheet Tac Gia, Tac Pham, The Loai
+                            </span>
+                        </div>
+ 
+                        <!-- Import loading -->
+                        <div id="importLoading" style="display:none;margin-top:1rem;text-align:center;padding:1.5rem">
+                            <div class="loading"></div>
+                            <p style="color:#1565C0;font-weight:600">⏳ Đang xử lý dữ liệu, vui lòng chờ...</p>
+                            <p style="color:#888;font-size:.9rem">Quá trình này có thể mất vài giây</p>
+                        </div>
+ 
+                        <!-- Import result -->
+                        <div id="importResult" style="display:none;margin-top:1.5rem"></div>
+                    </div>
+ 
+                </div>
+            </div>
+        </div>
+            <!-- TAB: THỐNG KÊ -->
+            <div id="content-thong-ke" class="tab-content" style="display:none">
+ 
+                <!-- KPI Cards -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-tac-gia">
+                        <div class="kpi-icon">✍️</div>
+                        <div class="kpi-body">
+                            <div class="kpi-number" id="statTacGia">-</div>
+                            <div class="kpi-label">Tác giả</div>
+                        </div>
+                        <div class="kpi-bg-icon">✍️</div>
+                    </div>
+                    <div class="kpi-card kpi-tac-pham">
+                        <div class="kpi-icon">📖</div>
+                        <div class="kpi-body">
+                            <div class="kpi-number" id="statTacPham">-</div>
+                            <div class="kpi-label">Tác phẩm</div>
+                        </div>
+                        <div class="kpi-bg-icon">📖</div>
+                    </div>
+                    <div class="kpi-card kpi-nhan-vat">
+                        <div class="kpi-icon">👥</div>
+                        <div class="kpi-body">
+                            <div class="kpi-number" id="statNhanVat">-</div>
+                            <div class="kpi-label">Nhân vật</div>
+                        </div>
+                        <div class="kpi-bg-icon">👥</div>
+                    </div>
+                    <div class="kpi-card kpi-the-loai">
+                        <div class="kpi-icon">🏷️</div>
+                        <div class="kpi-body">
+                            <div class="kpi-number" id="statTheLoai">-</div>
+                            <div class="kpi-label">Thể loại</div>
+                        </div>
+                        <div class="kpi-bg-icon">🏷️</div>
+                    </div>
+                    <div class="kpi-card kpi-users">
+                        <div class="kpi-icon">👤</div>
+                        <div class="kpi-body">
+                            <div class="kpi-number" id="statUsers">-</div>
+                            <div class="kpi-label">Người dùng</div>
+                        </div>
+                        <div class="kpi-bg-icon">👤</div>
+                    </div>
+                </div>
+     
+                <!-- Row 1: Donut + Bar ngang -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <span class="chart-icon">🍩</span>
+                            <h3>Phân bố theo Thể loại</h3>
+                        </div>
+                        <div class="chart-wrap" style="height:280px">
+                            <canvas id="chartTheLoai"></canvas>
+                        </div>
+                    </div>
+     
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <span class="chart-icon">📊</span>
+                            <h3>Tác phẩm theo Giai đoạn</h3>
+                        </div>
+                        <div class="chart-wrap" style="height:280px">
+                            <canvas id="chartGiaiDoan"></canvas>
+                        </div>
+                    </div>
+                </div>
+     
+                <!-- Row 2: Bar dọc tác giả + Line năm -->
+                <div class="chart-row">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <span class="chart-icon">🏆</span>
+                            <h3>Top Tác giả nhiều tác phẩm</h3>
+                        </div>
+                        <div class="chart-wrap" style="height:300px">
+                            <canvas id="chartTacGia"></canvas>
+                        </div>
+                    </div>
+     
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <span class="chart-icon">📈</span>
+                            <h3>Tác phẩm theo Năm sáng tác</h3>
+                        </div>
+                        <div class="chart-wrap" style="height:300px">
+                            <canvas id="chartNamSangTac"></canvas>
+                        </div>
+                    </div>
+                </div>
+     
+                <!-- Row 3: Bar nhân vật full width -->
+                <div class="chart-row">
+                    <div class="chart-card chart-full">
+                        <div class="chart-header">
+                            <span class="chart-icon">👥</span>
+                            <h3>Top Tác phẩm nhiều nhân vật nhất</h3>
+                        </div>
+                        <div class="chart-wrap" style="height:260px">
+                            <canvas id="chartNhanVat"></canvas>
+                        </div>
+                    </div>
+                </div>
+     
+            </div>
+
+        </div>
+    </section>
+
+    <!-- User Modal -->
+    <div id="userModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="userModalTitle">Thêm người dùng</h3>
+                <button class="modal-close" onclick="closeUserModal()">&times;</button>
+            </div>
+            <form id="userForm" onsubmit="saveUser(event)">
+                <input type="hidden" id="userId" name="id">
+                <input type="hidden" id="userEditMode" value="false">
+                
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Username *</label>
+                        <input type="text" name="username" id="userUsername" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" name="email" id="userEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Họ và tên *</label>
+                        <input type="text" name="full_name" id="userFullName" required>
+                    </div>
+                    
+                    <div class="form-group" id="passwordGroup">
+                        <label>Mật khẩu *</label>
+                        <input type="password" name="password" id="userPassword">
+                        <small class="form-hint">Để trống nếu không đổi mật khẩu (khi sửa)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="is_admin" id="userIsAdmin">
+                            <span>Quyền Admin</span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="is_active" id="userIsActive" checked>
+                            <span>Kích hoạt tài khoản</span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeUserModal()">Hủy</button>
+                    <button type="submit" class="btn-primary">Lưu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Văn Học Việt Nam</h3>
+                    <p>Hệ thống tri thức văn học sử dụng công nghệ Knowledge Graph</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Liên kết</h4>
+                    <ul>
+                        <li><a href="/tac-gia">Tác giả</a></li>
+                        <li><a href="/tac-pham">Tác phẩm</a></li>
+                        <li><a href="/dien-dan">Diễn đàn</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Công nghệ</h4>
+                    <ul>
+                        <li>Neo4j Knowledge Graph</li>
+                        <li>Flask Backend</li>
+                        <li>NLP tiếng Việt</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2026 Văn Học Việt Nam - Đồ án tốt nghiệp</p>
+                <p>Được thực hiển bời Đỗ Trầm Trung Trực - MSSV 64132749</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/auth.js"></script>
+    <script src="/static/js/admin.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</body>
+</html>
