@@ -8,6 +8,7 @@ from flask_cors import CORS
 from flask_login import LoginManager, login_required, current_user
 from config import Config
 import logging
+import os
 from services.neo4j_service import Neo4jService
 
 # Import routes
@@ -181,4 +182,8 @@ def create_app(config_class=Config):
 if __name__ == '__main__':
     app = create_app()
     logger.info("Starting Flask development server...")
-    app.run(debug=Config.DEBUG, host='0.0.0.0', port=5000)
+
+    app.run(
+        host='0.0.0.0',
+        port=int(os.environ.get("PORT", 5000))
+    )
