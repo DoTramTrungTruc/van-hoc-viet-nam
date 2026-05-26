@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 class Neo4jService:
     """Service class để tương tác với Neo4j database"""
     
-    def __init__(self, uri: str, user: str, password: str, database: str = "neo4j"):
+    def __init__(self, uri: str, user: str, password: str, database: str = "ae54e57b"):
         """
         Khởi tạo kết nối Neo4j
         
