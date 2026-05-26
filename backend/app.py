@@ -41,6 +41,12 @@ def create_app(config_class=Config):
                 template_folder='../frontend/templates',
                 static_folder='../frontend/static')
     app.config.from_object(config_class)
+    print("===== NEO4J CONFIG =====")
+    print("URI:", Config.NEO4J_URI)
+    print("USER:", Config.NEO4J_USER)
+    print("DATABASE:", Config.NEO4J_DATABASE)
+    print("========================")
+
     app.neo4j_service = Neo4jService(
         uri=Config.NEO4J_URI,
         user=Config.NEO4J_USER,
@@ -177,9 +183,7 @@ def create_app(config_class=Config):
     
     logger.info("Flask app created successfully")
     return app
-print("URI:", Config.NEO4J_URI)
-print("USER:", Config.NEO4J_USER)
-print("DATABASE:", Config.NEO4J_DATABASE)
+ 
 if __name__ == '__main__':
     app = create_app()
     logger.info("Starting Flask development server...")
