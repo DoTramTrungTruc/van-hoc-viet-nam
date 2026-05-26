@@ -23,8 +23,8 @@ class Config:
     PERMANENT_SESSION_LIFETIME = 3600  # 1 hour
     
     # Neo4j Configuration
-    NEO4J_URI = os.getenv('NEO4J_URI', 'bolt://localhost:7687')
-    NEO4J_USER = os.getenv('NEO4J_USER', 'ae54e57b')
+    NEO4J_URI = os.getenv('NEO4J_URI', 'neo4j+s://ae54e57b.databases.neo4j.io')
+    NEO4J_USER = os.getenv('NEO4J_USER', 'neo4j')
     NEO4J_PASSWORD = os.getenv('NEO4J_PASSWORD', 'password')
     NEO4J_DATABASE = os.getenv('NEO4J_DATABASE', 'ae54e57b')
     
