@@ -19,7 +19,8 @@ neo4j = Neo4jService(
     password=os.getenv("NEO4J_PASSWORD", "password")
 )
 
- 
+
+
 # ===== MÀU SẮC NODE =====
 NODE_COLORS = {
     "TacGia":   {"background": "#8B4513", "border": "#D4AF37", "font": "#FFFFFF"},
@@ -794,24 +795,14 @@ DỮ LIỆU:
             "success": False,
             "message": str(e)
         })  
- 
- 
-# ================================================================
-#  ROUTE 4: /api/graph — Lấy KG thuần (cho trang chi tiết)
-# ================================================================
-@chat_bp.route('/api/graph', methods=['GET'])
-def get_graph():
-    """
-    Endpoint riêng để frontend load KG đầy đủ khi mở trang tác phẩm,
-    không cần hỏi chatbot.
-    """
-    tac_pham = request.args.get('tac_pham', '').strip()
-    if not tac_pham:
-        return jsonify({"success": False, "message": "Thiếu tên tác phẩm."})
- 
+@chat_bp.route('/api/graph', methods=['GET']) 
+def get_graph(): 
+    """ Endpoint riêng để frontend load KG đầy đủ khi mở trang tác phẩm, không cần hỏi chatbot. """ 
+    tac_pham = request.args.get('tac_pham', '').strip() 
+    if not tac_pham: 
+     return jsonify({"success": False, "message": "Thiếu tên tác phẩm."}) 
     try:
-        graph_data = get_subgraph_for_question(tac_pham, "hiển thị tất cả nhân vật",["nhân vật"])
-        return jsonify({"success": True, "graph_data": graph_data})
-    except Exception as e:
+        graph_data = get_subgraph_for_question(tac_pham,"hiển thị tất cả nhân vật", ["nhân vật"]) 
+        return jsonify({"success": True, "graph_data": graph_data}) 
+    except Exception as e: 
         return jsonify({"success": False, "message": str(e)})
-
