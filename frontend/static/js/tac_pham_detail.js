@@ -677,7 +677,7 @@ async function sendMessage() {
         hideTyping();
 
         if (data.success) {
-            addMessage(data.answer, 'bot');
+            addMessage(data.answer, 'bot', data.graph_data || null);
         } else {
             addMessage(data.answer || "Không tìm được câu trả lời.", 'bot');
         }
@@ -691,7 +691,105 @@ async function sendMessage() {
         addMessage(response, 'bot');
     }
 }
+function renderMiniGraph(containerId, graphData) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
 
+    // Dùng lại groups/màu từ drawGraph gốc
+    const options = {
+        nodes: {
+            shape:  'box',
+            margin: { top: 6, bottom: 6, left: 10, right: 10 },
+            shapeProperties: { borderRadius: 5 },
+            font:   { size: 11, face: 'Segoe UI', color: '#333' },
+            shadow: { enabled: true, color: 'rgba(0,0,0,0.08)', size: 3, x: 1, y: 1 },
+        },
+        edges: {
+            font:   { size: 9, align: 'middle', background: '#fff', color: '#666' },
+            smooth: { type: 'curvedCW', roundness: 0.2 },
+            width:  1.2,
+            arrows: { to: { enabled: true, scaleFactor: 0.6 } },
+        },
+        groups: {
+            TacGia:   { color: { background: '#EBF5FB', border: '#2980B9' } },
+            TacPham:  { color: { background: '#FFF9E6', border: '#D4AC0D' } },
+            NhanVat:  { color: { background: '#FDEDEC', border: '#E74C3C' } },
+            TheLoai:  { color: { background: '#E8F8F5', border: '#1ABC9C' } },
+            GiaiDoan: { color: { background: '#E8DAEF', border: '#8E44AD' } },
+        },
+        physics: {
+            enabled: true,
+            solver:  'barnesHut',
+            barnesHut: {
+                gravitationalConstant: -1500,
+                centralGravity:        0.3,
+                springLength:          100,
+                springConstant:        0.04,
+                damping:               0.4,
+                avoidOverlap:          1,
+            },
+            stabilization: { enabled: true, iterations: 100 },
+        },
+        interaction: {
+            hover:             true,
+            tooltipDelay:      150,
+            navigationButtons: false,   // ← không cần nút điều hướng ở mini
+            keyboard:          false,
+            zoomView:          true,
+            dragNodes:         true,
+        },
+    };
+
+    // Map group từ server sang group của Vis.js
+    const nodes = new vis.DataSet(
+        graphData.nodes.map(n => ({
+            id:    n.id,
+            label: n.label,
+            group: n.group,   // TacGia / TacPham / NhanVat / TheLoai / GiaiDoan
+            title: n.title,
+            // Highlight node liên quan
+            borderWidth: n.highlighted ? 3 : 1,
+            shadow: n.highlighted
+                ? { enabled: true, color: '#D4AC0D', size: 8 }
+                : { enabled: false },
+        }))
+    );
+
+    const edges = new vis.DataSet(graphData.edges);
+
+    let miniNetwork = null;
+    try {
+        miniNetwork = new vis.Network(
+            container,
+            { nodes, edges },
+            options
+        );
+
+        miniNetwork.once('stabilizationIterationsDone', () => {
+            miniNetwork.setOptions({ physics: false });
+            miniNetwork.fit({ animation: { duration: 400 } });
+        });
+
+        // Click vào node trong mini graph → hiện tooltip nhỏ
+        miniNetwork.on('click', params => {
+            if (params.nodes.length > 0) {
+                const node = nodes.get(params.nodes[0]);
+                if (node?.title) {
+                    // Hiện title ngay tại vị trí click
+                    const tip = document.createElement('div');
+                    tip.className   = 'mini-graph-tip';
+                    tip.innerHTML   = typeof node.title === 'string'
+                        ? node.title.replace(/\n/g, '<br>')
+                        : node.label;
+                    container.appendChild(tip);
+                    setTimeout(() => tip.remove(), 3000);
+                }
+            }
+        });
+    } catch (err) {
+        console.warn('Mini graph render error:', err);
+    }
+}
 function formatAIResponse(text) {
 
     return text
@@ -715,7 +813,7 @@ function formatAIResponse(text) {
             '<li>$1</li>');
 }
 
-function addMessage(text, sender) {
+function addMessage(text, sender,graphData = null ) {
 
     const messagesDiv = document.getElementById('chatMessages');
 
@@ -732,12 +830,21 @@ function addMessage(text, sender) {
         sender === 'bot'
             ? formatAIResponse(text)
             : text;
+            const graphId = 'mini-graph-' + Date.now();
 
+            // ✅ Nếu là bot và có graph_data → thêm khung mini graph
+            const graphHTML = (sender === 'bot' && graphData && graphData.nodes?.length > 0)
+                ? `<div class="mini-graph-wrapper">
+                       <div class="mini-graph-label">🔗 Knowledge Graph liên quan</div>
+                       <div id="${graphId}" class="mini-graph-container"></div>
+                   </div>`
+                : '';
     messageDiv.innerHTML = `
         <div class="message-icon">${icon}</div>
 
         <div class="message-content">
             ${formattedText}
+            ${graphHTML}
         </div>
     `;
 
@@ -745,6 +852,9 @@ function addMessage(text, sender) {
 
     messagesDiv.scrollTop =
         messagesDiv.scrollHeight;
+    if (sender === 'bot' && graphData && graphData.nodes?.length > 0) {
+            setTimeout(() => renderMiniGraph(graphId, graphData), 100);
+    }
 }
 
 function showTyping() {
