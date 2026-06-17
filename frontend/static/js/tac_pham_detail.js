@@ -1410,34 +1410,8 @@ async function toggleFavorite() {
             })
         });
 
-         if (res.status === 401) {
+        if (res.status === 401) {
 
-            localStorage.setItem(
-                "redirect_after_login",
-                window.location.href
-            );
-        
-            localStorage.setItem(
-                "favorite_after_login",
-                tacPhamData.ten
-            );
-        
-            showToast(
-                "⚠️ Vui lòng đăng nhập để yêu thích tác phẩm!",
-                "error"
-            );
-        
-            setTimeout(() => {
-                window.location.href = "/login";
-            }, 1500);
-        
-            return;
-        }
-
-
-        const result = await res.json();
-
-        if (result.success) {
             localStorage.setItem(
                 "redirect_after_login",
                 window.location.href
