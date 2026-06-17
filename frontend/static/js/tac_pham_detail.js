@@ -1410,21 +1410,92 @@ async function toggleFavorite() {
             })
         });
 
-        if (res.status === 401) {
+         if (res.status === 401) {
 
-            showToast("⚠️ Vui lòng đăng nhập để yêu thích tác phẩm!", "error");
-
+            localStorage.setItem(
+                "redirect_after_login",
+                window.location.href
+            );
+        
+            localStorage.setItem(
+                "favorite_after_login",
+                tacPhamData.ten
+            );
+        
+            showToast(
+                "⚠️ Vui lòng đăng nhập để yêu thích tác phẩm!",
+                "error"
+            );
+        
             setTimeout(() => {
                 window.location.href = "/login";
             }, 1500);
+        
+            return;
+        }
 
+
+        const result = await res.json();
+
+        if (result.success) {
+            localStorage.setItem(
+                "redirect_after_login",
+                window.location.href
+            );
+        
+            localStorage.setItem(
+                "favorite_after_login",
+                tacPhamData.ten
+            );
+        
+            showToast(
+                "⚠️ Vui lòng đăng nhập để yêu thích tác phẩm!",
+                "error"
+            );
+        
+            setTimeout(() => {
+                window.location.href = "/login";
+            }, 1500);
+        
             return;
         }
 
         const result = await res.json();
 
         if (result.success) {
+            const favoriteAfterLogin =
+            localStorage.getItem(
+                "favorite_after_login"
+            );
 
+        if (favoriteAfterLogin) {
+
+            try {
+
+                await fetch(
+                    '/api/auth/favorite',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type':
+                                'application/json'
+                        },
+                        credentials: 'include',
+                        body: JSON.stringify({
+                            ten_tac_pham:
+                                favoriteAfterLogin
+                        })
+                    }
+                );
+
+            } catch (err) {
+
+                console.error(
+                    "Auto favorite error:",
+                    err
+                );
+            }
+        }
             const btn = document.querySelector('.favorite-btn');
 
             if (result.is_favorite) {
