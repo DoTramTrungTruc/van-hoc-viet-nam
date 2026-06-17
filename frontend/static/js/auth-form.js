@@ -57,17 +57,55 @@ async function handleLogin(event) {
         
         const result = await response.json();
         
-        if (result.success) {
-            showAlert('✓ Đăng nhập thành công! Đang chuyển hướng...', 'success');
-            
-            // Redirect after 1 second
+     if (result.success) {
+
+            showAlert(
+                '✓ Đăng nhập thành công! Đang chuyển hướng...',
+                'success'
+            );
+        
             setTimeout(() => {
-                if (result.user && result.user.is_admin) {
-                    window.location.href = '/admin';
+        
+                const redirectUrl =
+                    localStorage.getItem(
+                        'redirect_after_login'
+                    );
+        
+                const favoriteAfterLogin =
+                    localStorage.getItem(
+                        'favorite_after_login'
+                    );
+        
+                if (redirectUrl) {
+        
+                    localStorage.removeItem(
+                        'redirect_after_login'
+                    );
+        
+                    localStorage.removeItem(
+                        'favorite_after_login'
+                    );
+        
+                    window.location.href =
+                        redirectUrl;
+        
                 } else {
-                    window.location.href = '/';
+        
+                    if (result.user &&
+                        result.user.is_admin) {
+        
+                        window.location.href =
+                            '/admin';
+        
+                    } else {
+        
+                        window.location.href =
+                            '/';
+                    }
                 }
+        
             }, 1000);
+        
         } else {
             showAlert('✗ ' + (result.error || 'Đăng nhập thất bại'), 'error');
             submitBtn.disabled = false;
