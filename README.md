@@ -287,9 +287,9 @@ neo4j-admin load --from=/backup/van-hoc.dump --database=van-hoc --force
 ## 👨‍💻 Tác giả
 
 Đồ án tốt nghiệp K64
-- Sinh viên: [Tên của bạn]
-- MSSV: [Mã số sinh viên]
-- Giảng viên hướng dẫn: [Tên giảng viên]
+- Sinh viên: Đỗ Trầm Trung Trực
+- MSSV: 64132749
+- Giảng viên hướng dẫn: Lê Thị Bích Hằng
 
 ## 📄 License
 
@@ -301,5 +301,5 @@ Mọi đóng góp, ý kiến đều được hoan nghênh. Vui lòng tạo issue
 
 ## 📮 Liên hệ
 
-- Email: [your-email]
-- GitHub: [your-github]
+- Email: trungtruchp42@gmail.com
+- GitHub:(https://github.com/DoTramTrungTruc/)
